@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 TLauncher Web Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; margin: 0; padding: 20px; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 3em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .main { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+        .sidebar, .content { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .version-item { 
+            background: rgba(255,255,255,0.2); margin: 10px 0; padding: 15px; 
+            border-radius: 8px; cursor: pointer; transition: all 0.3s;
+        }
+        .version-item:hover { background: rgba(255,255,255,0.3); }
+        .version-item.selected { background: rgba(0,255,0,0.3); }
+        .form-group { margin: 15px 0; }
+        .form-group input, select { 
+            width: 100%; padding: 10px; border: none; border-radius: 5px; 
+            background: rgba(255,255,255,0.2); color: white;
+        }
+        .launch-btn { 
+            width: 100%; padding: 15px; background: #ff6b6b; 
+            border: none; border-radius: 8px; color: white; 
+            font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        .launch-btn:hover { background: #ff5252; }
+        .game-area { 
+            background: #000; border-radius: 10px; 
+            height: 400px; display: flex; align-items: center; 
+            justify-content: center; margin-bottom: 20px;
+        }
+        .console { 
+            background: #000; color: #00ff00; padding: 15px; 
+            border-radius: 8px; height: 200px; overflow-y: auto; 
+            font-family: 'Courier New', monospace;
+        }
+        @media (max-width: 768px) { .main { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 TLauncher Web Client</h1>
+            <p>Minecraft no navegador - GitHub Pages</p>
+        </div>
+        <div class="main">
+            <div class="sidebar">
+                <h2>⚙️ Configuração</h2>
+                
+                <div class="version-item" data-version="1.20.4" onclick="selectVersion(this)">
+                    <strong>Minecraft 1.20.4</strong>
+                </div>
+                <div class="version-item" data-version="1.19.4" onclick="selectVersion(this)">
+                    <strong>Minecraft 1.19.4</strong>
+                </div>
+                <div class="version-item" data-version="1.18.2" onclick="selectVersion(this)">
+                    <strong>Minecraft 1.18.2</strong>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Nome do jogador">
+                </div>
+                
+                <div class="form-group">
+                    <select id="memory">
+                        <option value="4" selected>4 GB RAM</option>
+                        <option value="8">8 GB RAM</option>
+                    </select>
+                </div>
+                
+                <button class="launch-btn" onclick="launchGame()">
+                    🚀 Iniciar Minecraft
+                </button>
+            </div>
+            
+            <div class="content">
+                <div class="game-area">
+                    <h3 id="game-status">🎮 Selecione uma versão para começar</h3>
+                </div>
+                
+                <div class="console" id="console">
+                    <div>[INFO] TLauncher Web Client inicializado ✅</div>
+                    <div>[INFO] Pronto para jogar! 🎮</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedVersion = null;
+        
+        function selectVersion(element) {
+            document.querySelectorAll('.version-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedVersion = element.dataset.version;
+            
+            document.getElementById('game-status').textContent = `✅ Minecraft ${selectedVersion} selecionado`;
+            addLog(`Versão ${selectedVersion} selecionada`);
+        }
+        
+        function launchGame() {
+            const username = document.getElementById('username').value;
+            const memory = document.getElementById('memory').value;
+            
+            if (!selectedVersion) {
+                addLog('❌ Selecione uma versão primeiro!');
+                return;
+            }
+            
+            if (!username) {
+                addLog('❌ Digite seu nome de usuário!');
+                return;
+            }
+            
+            document.getElementById('game-status').innerHTML = '🚀 Iniciando Minecraft...';
+            addLog(`🚀 Iniciando Minecraft ${selectedVersion}`);
+            addLog(`👤 Jogador: ${username}`);
+            addLog(`💾 RAM: ${memory}GB`);
+            
+            // Simulação do processo de inicialização
+            setTimeout(() => {
+                document.getElementById('game-status').innerHTML = '✅ Minecraft iniciado com sucesso!';
+                addLog('✅ Jogo iniciado com sucesso!');
+                addLog('🎮 Divirta-se jogando!');
+            }, 2000);
+        }
+        
+        function addLog(message) {
+            const console = document.getElementById('console');
+            const time = new Date().toLocaleTimeString();
+            console.innerHTML += `<div>[${time}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+        }
+    </script>
+</body>
+</html>
